@@ -234,6 +234,181 @@ app.listen(port, () => {
 
 
 
-VI - model setup
+VI - mongoose  model setup
+
+1. make sure u have models folder
+and with sub folders
+ex: Admin Users Staff
+2. Then each folder should have same filename with there foldername
+ex: Admin/Admin.js
+
+In Users.js 
+Add this code below
+.....
+
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema({
+    firstname: {
+        type: String,
+        required: true
+    },
+    lastname: {
+        type: String,
+        required: true
+    },
+    email: {
+    type:String,
+    required: true,
+    unique: true
+    },
+    age: {
+        type: number,
+        required: true
+    }
+})
+// it acceps 3 params 
+
+mongoose.model("customerName", userVariableName, "collectionName)
+const userModel = mongoose.model("Users", userSchema, "users")
+export default userModel
+
+...................
 
 
+VII - Connecting model in API's & testing in Postman
+
+1. make sure you have model schema setup and export of model
+ex: export default userModel
+
+2. now come back to controllers folder in users in index.js
+3. controllers/users/index.js
+add this code below
+
+.............
+
+import express from "express";
+import userModel from "../../models/Users/Users.js"
+const router = express.Router()
+
+//Get all API
+
+/*
+API METHOD: Get
+ROUTE: /getall
+API NAME: Get all users
+*/
+
+router.get("/getall",async (req, res) => {
+    try{
+        let allUsers = await userModel.find({})
+        res.status(200).json(allUsers)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({msg: error})
+    }
+})
+
+
+API METHOD: Get one
+ROUTE: /get
+API NAME: Get one
+
+
+*/
+
+router.get("/get",async (req, res) => {
+    try{
+        let user = await userModel.find({firstname: "Sneha})
+        res.status(200).json(user)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({msg: error})
+    }
+})
+
+*/
+
+/*
+API METHOD: POST
+ROUTE: /add
+API NAME: adding users
+
+router.post("/add", async(req, res) => {
+    try{
+let userData = req.body
+console.log(userData)
+await userModel.create(userData)
+res.send(201).json({msg: "User added successfully})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({msg: error})
+    }
+})
+
+*/
+
+/*
+API METHOD: PUT
+ROUTE: /update/:email (req.params.email)
+ROUTE: /update (this is for req.body)
+API NAME: update users
+
+router.put("update/:email", (req, res)=>{
+    try{
+        let userEmail = req.params.email
+         let userEmail = req.body
+         console.log(userEmail)
+
+         await userModel.findOneAndUpdate(
+            {email: userEmail, {$set:userData},{new: true} })
+
+            res.status(200).json({msg: "User Updated successfully"})
+
+    }catch(error){
+        console.log(error)
+        res.status(500).json({msg: error})
+    }
+})
+*/
+
+/*
+API METHOD: DELETE
+ROUTE: /delete/:email
+API NAME: delete users
+
+
+router.delete("/delete/:email", async(req, res)=>{
+    try{
+      let userEmail = req.params.email
+      console.log(userEmail)
+      await userModel.deleteOne({msg: "User deleted successfully})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({msg: error})
+    }
+})
+*/
+
+
+/*
+API METHOD: DELETE
+ROUTE: /deleteall
+API NAME: delete all users
+
+this api will delete all user collection
+
+router.delete("/deleteall", async(req, res)=>{
+    try{
+        await userModel.deleteMany({}) //if you pass like this it will delete all api's
+        (or)
+        await userModel.deleteMany({firstname: "Sneha}) // it will delete only first name
+        res.status(200).json({msg: "All users deleted successfully"})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({msg: error})
+    }
+})
+export default router
+*/
+......................
